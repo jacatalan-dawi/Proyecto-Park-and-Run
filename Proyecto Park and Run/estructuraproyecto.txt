@@ -1,0 +1,14 @@
+src
+├── app
+│   └── Main.java
+├── core
+│   └── SistemaEstacionamiento.java
+├── model
+│   ├── Coche.java
+│   ├── EspacioCoche.java
+│   ├── EspacioEstacionamiento.java
+│   ├── EspacioMoto.java
+│   ├── Moto.java
+│   └── Vehiculo.java
+└── util
+    └── FileManager.java

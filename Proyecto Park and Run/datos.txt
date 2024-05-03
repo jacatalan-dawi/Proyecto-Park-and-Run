@@ -1,0 +1,8 @@
+Moto,Moto 1
+Moto,Moto 2
+Coche,Coche 1
+Coche,Coche 2
+Coche,Coche 3
+Coche,Coche 4
+Coche,Coche 5
+Coche,Coche 6
