@@ -1,3 +1,4 @@
+//Moto class en ruta ./Proyecto-Park-and-Run/src/core/Moto.java
 package model;
 
 public class EspacioMoto extends EspacioEstacionamiento {

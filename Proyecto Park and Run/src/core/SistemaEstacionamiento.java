@@ -9,6 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SistemaEstacionamiento {
+
+    public List<Vehiculo> getVehiculos() {
+        List<Vehiculo> vehiculos = new ArrayList<>();
+        for (EspacioEstacionamiento espacio : espacios) {
+            if (!espacio.estaDisponible()) {
+                vehiculos.add(espacio.getVehiculo());
+            }
+        }
+        return vehiculos;
+    }
+
     private List<EspacioEstacionamiento> espacios;
 
     public SistemaEstacionamiento(int numEspaciosMoto, int numEspaciosCoche) {
@@ -23,12 +34,39 @@ public class SistemaEstacionamiento {
 
     public boolean estacionarVehiculo(Vehiculo vehiculo) {
         for (EspacioEstacionamiento espacio : espacios) {
-            if (espacio.aceptaVehiculo(vehiculo)) {
-                espacio.disponible = false;
+            if (espacio.aceptaVehiculo(vehiculo) && espacio.estaDisponible()) {
+                espacio.estacionarVehiculo(vehiculo);
+                return true;
+            }
+        }
+        System.out.println("Advertencia: No se pudo estacionar el vehículo con ID " + vehiculo.getId() + ". No hay espacios disponibles.");
+        return false;
+    }
+
+    public boolean quitarVehiculo(String id) {
+        for (EspacioEstacionamiento espacio : espacios) {
+            if (!espacio.estaDisponible() && espacio.getVehiculo().getId().equals(id)) {
+                espacio.quitarVehiculo();
                 return true;
             }
         }
         return false;
+    }
+
+    public void verVehiculos() {
+        for (EspacioEstacionamiento espacio : espacios) {
+            if (!espacio.estaDisponible()) {
+                System.out.println(espacio.getVehiculo());
+            }
+        }
+    }
+
+    public void verVehiculosTipo(String tipo) {
+        for (EspacioEstacionamiento espacio : espacios) {
+            if (!espacio.estaDisponible() && espacio.getVehiculo().getTipo().equals(tipo)) {
+                System.out.println(espacio.getVehiculo());
+            }
+        }
     }
 
     public int obtenerIngresos() {

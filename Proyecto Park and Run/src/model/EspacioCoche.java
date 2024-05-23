@@ -1,3 +1,4 @@
+//EspacioCoche class en ruta ./Proyecto-Park-and-Run/src/model/EspacioCoche.java
 package model;
 
 public class EspacioCoche extends EspacioEstacionamiento {

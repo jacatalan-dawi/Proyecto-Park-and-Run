@@ -5,80 +5,94 @@ import model.Coche;
 import model.Moto;
 import model.Vehiculo;
 
+import java.io.*;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        // Crear un sistema de estacionamiento con 5 espacios para motos y 3 para coches
-        SistemaEstacionamiento sistema = new SistemaEstacionamiento(5, 4);
+        // Crear un sistema de estacionamiento con 2 espacios para motos y 3 para coches
+        SistemaEstacionamiento sistema = new SistemaEstacionamiento(2, 6);
+        Scanner scanner = new Scanner(System.in);
 
-        // Simular estacionamiento de vehículos
-        Vehiculo moto1 = new Moto();
-        Vehiculo moto2 = new Moto();
-        Vehiculo coche1 = new Coche();
-        Vehiculo coche2 = new Coche();
-        Vehiculo coche3 = new Coche();
-        Vehiculo coche4 = new Coche();
-        Vehiculo coche5 = new Coche();
-        Vehiculo coche6 = new Coche();
-
-        // Estacionar vehículos
-        boolean estacionadoMoto = sistema.estacionarVehiculo(moto1);
-        boolean estacionadoMoto2 = sistema.estacionarVehiculo(moto2);
-        boolean estacionadoCoche1 = sistema.estacionarVehiculo(coche1);
-        boolean estacionadoCoche2 = sistema.estacionarVehiculo(coche2);
-        boolean estacionadoCoche3 = sistema.estacionarVehiculo(coche3);
-        boolean estacionadoCoche4 = sistema.estacionarVehiculo(coche4);
-        boolean estacionadoCoche5 = sistema.estacionarVehiculo(coche5);
-        boolean estacionadoCoche6 = sistema.estacionarVehiculo(coche6);
-
-        // Verificar si los vehículos fueron estacionados correctamente
-        if (estacionadoMoto) {
-            System.out.println("Moto 1 estacionada correctamente.");
-        } else {
-            System.out.println("No hay espacio disponible para estacionar la moto 1.");
+        // Leer el fichero "datos.txt" y añadir los vehículos al sistema
+        try (BufferedReader reader = new BufferedReader(new FileReader("datos.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String tipo = parts[0].trim();
+                String id = parts[1].trim();
+                if ("Coche".equals(tipo)) {
+                    Coche coche = new Coche(id);
+                    sistema.estacionarVehiculo(coche);
+                } else if ("Moto".equals(tipo)) {
+                    Moto moto = new Moto(id);
+                    sistema.estacionarVehiculo(moto);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el fichero 'datos.txt': " + e.getMessage());
         }
 
-        if (estacionadoMoto2) {
-            System.out.println("Moto 2 estacionada correctamente.");
-        } else {
-            System.out.println("No hay espacio disponible para estacionar la moto 2.");
-        }
+        while (true) {
+            System.out.println("Por favor, elige una opción:");
+            System.out.println("1. Ver vehículos");
+            System.out.println("2. Añadir coche");
+            System.out.println("3. Añadir moto");
+            System.out.println("4. Quitar vehículo");
+            System.out.println("5. Ver vehículos de un tipo");
+            System.out.println("6. Salir");
+            System.out.print("Opción: ");
+            int opcion = scanner.nextInt();
+            scanner.nextLine();  // consume newline
 
-        if (estacionadoCoche1) {
-            System.out.println("Coche 1 estacionado correctamente.");
-        } else {
-            System.out.println("No hay espacio disponible para estacionar el coche 1.");
+            switch (opcion) {
+                case 1:
+                    // Ver vehículos
+                    sistema.informeOcupacion();
+                    break;
+                case 2:
+                    // Añadir coche
+                    System.out.println("Introduce el ID del coche a añadir:");
+                    String idCoche = scanner.nextLine();
+                    Coche coche = new Coche(idCoche);
+                    sistema.estacionarVehiculo(coche);
+                    System.out.println("Coche añadido.");
+                    break;
+                case 3:
+                    // Añadir moto
+                    System.out.println("Introduce el ID de la moto a añadir:");
+                    String idMoto = scanner.nextLine();
+                    Moto moto = new Moto(idMoto);
+                    sistema.estacionarVehiculo(moto);
+                    System.out.println("Moto añadida.");
+                    break;
+                case 4:
+                    // Quitar vehículo
+                    System.out.println("Introduce el ID del vehículo a quitar:");
+                    String id = scanner.nextLine();
+                    sistema.quitarVehiculo(id);
+                    System.out.println("Vehículo quitado.");
+                    break;
+                case 5:
+                    // Ver vehículos de un tipo
+                    System.out.println("Introduce el tipo de vehículo a ver (Coche o Moto):");
+                    String tipo = scanner.nextLine();
+                    sistema.verVehiculosTipo(tipo);
+                    break;
+                case 6:
+                    // Salir y guardar los cambios
+                    System.out.println("Guardando los cambios y saliendo...");
+                    try (PrintWriter writer = new PrintWriter(new FileWriter("datos.txt"))) {
+                        for (Vehiculo vehiculo : sistema.getVehiculos()) {
+                            writer.println(vehiculo.getTipo() + "," + vehiculo.getId());
+                        }
+                    } catch (IOException e) {
+                        System.out.println("Error al escribir el fichero 'datos.txt': " + e.getMessage());
+                    }
+                    return;
+                default:
+                    System.out.println("Opción no reconocida. Por favor, intenta de nuevo.");
+            }
         }
-        if (estacionadoCoche2) {
-            System.out.println("Coche 2 estacionado correctamente.");
-        } else {
-            System.out.println("No hay espacio disponible para estacionar el coche 2.");
-        }
-
-        if (estacionadoCoche3) {
-            System.out.println("Coche 3 estacionado correctamente.");
-        } else {
-            System.out.println("No hay espacio disponible para estacionar el coche 3.");
-        }
-
-        if (estacionadoCoche4) {
-            System.out.println("Coche 4 estacionado correctamente.");
-        } else {
-            System.out.println("No hay espacio disponible para estacionar el coche 4.");
-        }
-
-        if (estacionadoCoche5) {
-            System.out.println("Coche 5 estacionado correctamente.");
-        } else {
-            System.out.println("No hay espacio disponible para estacionar el coche 5.");
-        }
-
-        if (estacionadoCoche6) {
-            System.out.println("Coche 6 estacionado correctamente.");
-        } else {
-            System.out.println("No hay espacio disponible para estacionar el coche 6.");
-        }
-
-        // Generar informe de ocupación
-        sistema.informeOcupacion();
     }
 }
